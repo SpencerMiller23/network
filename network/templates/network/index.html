@@ -1,0 +1,67 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+  <div class="container">
+    {% if user.is_authenticated %}
+      <div class="row">
+        <div class="col-12 post__form--container">
+          <h4>New Post</h4>
+          <form class="" action="{% url 'newpost' username=user.username %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <br>
+            <input type="submit" name="" class="btn btn-primary" value="Post">
+          </form>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-12">
+        {% for post in posts %}
+          <div class="post__container">
+            <a href="user/{{ post.user }}">@{{ post.user }}</a> - {{ post.timestamp }}
+            <br>
+            <p class="post__text--container post__{{ post.id }}--container">{{ post.text }}</p>
+            &hearts; <span class="post__{{ post.id }}--likes">{{ post.likes.count }}</span>
+            {% if user.is_authenticated %}
+              {% if request.user in post.likes.all %}
+                <button type="button" name="" class="btn btn-light btn-like" data-func="unlike" data-id="{{ post.id }}">Unlike</button>
+              {% else %}
+                <button type="button" name="" class="btn btn-dark btn-like" data-func="like" data-id="{{ post.id }}">Like</button>
+              {% endif %}
+              {% if post.user == request.user %}
+                <button type="button" name="" class="btn btn-secondary btn-edit" data-func="edit" data-id="{{ post.id }}">Edit</button>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if posts.has_other_pages %}
+    <div class="row">
+      <div class="col-5"></div>
+      <div class="col-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {% if posts.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% for i in posts.paginator.page_range %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if posts.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <div class="col-5"></div>
+    </div>
+    {% endif %}
+
+  </div>
+
+{% endblock %}

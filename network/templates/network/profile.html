@@ -1,0 +1,83 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <table class="profile__info--table">
+          <tr>
+            <td class="info__table--primary"><h3>@{{ user.username }}</h3></td>
+            <td class="info__table--primary">
+              <table>
+                <tr>
+                  <td>Posts</td>
+                </tr>
+                <tr>
+                  <td>{{ posts.count }}</td>
+                </tr>
+              </table>
+            </td>
+            <td class="info__table--primary">
+              <table>
+                <tr>
+                  <td>Followers</td>
+                </tr>
+                <tr>
+                  <td class="user__followers">{{ followers.count }}</td>
+                </tr>
+              </table>
+            </td>
+            <td class="info__table--primary">
+              <table>
+                <tr>
+                  <td>Following</td>
+                </tr>
+                <tr>
+                  <td>{{ following.count }}</td>
+                </tr>
+              </table>
+            </td>
+            {% if request.user.is_authenticated %}
+              {% if request.user != user %}
+                <td class="info__table--primary">
+                  {% if request.user in user_profile.follower.all %}
+                    <button type="button" id="btn-unfollow" class="btn btn-danger btn-follow" data-user="{{user.username}}">Unfollow</button>
+                  {% else %}
+                    <button type="button" id="btn-follow" class="btn btn-success btn-follow" data-user="{{user.username}}">Follow</button>
+                  {% endif %}
+                </td>
+              {% endif %}
+            {% endif %}
+          </tr>
+        </table>
+      </div>
+      <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        {% for post in posts %}
+          <div class="post__container">
+            <a href="{{ post.user }}">@{{ post.user }}</a> - {{ post.timestamp }}
+            <br>
+            <p class="post__text--container post__{{ post.id }}--container">{{ post.text }}</p>
+            &hearts; <span class="post__{{ post.id }}--likes">{{ post.likes.count }}</span>
+            {% if request.user.is_authenticated %}
+              {% if request.user in post.likes.all %}
+                <button type="button" name="" class="btn btn-light btn-like" data-func="unlike" data-id="{{ post.id }}">Unlike</button>
+              {% else %}
+                <button type="button" name="" class="btn btn-dark btn-like" data-func="like" data-id="{{ post.id }}">Like</button>
+              {% endif %}
+              {% if post.user == request.user %}
+                <button type="button" name="" class="btn btn-secondary btn-edit" data-func="edit" data-id="{{ post.id }}">Edit</button>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

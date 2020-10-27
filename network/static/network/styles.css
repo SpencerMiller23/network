@@ -1,0 +1,40 @@
+.row {
+  margin-top: 50px;
+}
+
+.post__form--container {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.post__form--container textarea {
+  width: 100%;
+}
+
+.post__container {
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.profile__info--table {
+  margin: auto;
+}
+
+.info__table--primary {
+  padding: 10px;
+}
+
+.info__table--primary td {
+  text-align: center;
+}
+
+.post__text--container {
+  margin-bottom: 0px !important;
+}
+
+.post__textarea {
+  width: 100%;
+}
